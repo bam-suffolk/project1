@@ -1,244 +1,243 @@
+/////// Project 1.
+//////// Brian Salaway  (CST 112; FALL 2015)
 
-<HTML>
-<BODY BGCOLOR=#DDEEFF>
-
-<CENTER>
-	<FONT SIZE=6 >
-	PROJECT #1
-	</FONT>
-	<BIG><I>
-<BR>
-The big, bad monster
-<XBR>
-chases the brave, little hero,
-<BR>
-who chases after the gold,
-<XBR>
-while the sun moves across the sky.
-</I></BIG>
-</CENTER>
-
-<P>
-Design two animated creatures (a hero and a monster) 
-that are drawn with
-at least three different fill colors,
-using drawing methods
-such as rect, ellipse,line, etc. 
-The monster chases the hero,
-who chases after the gold.
-As they move about, 
-the arms or legs of
-the animated creatures 
-assume different positions
-<I>(to simulate walking, crawling, etc.)
-</I>
+//// GLOBALS:  coordinates, speed, etc.
 
 
+float SunX, SunY; //position of Sun
+float SundX, SundY; ///speed of Sun 
+float horizon; 
+float heroX, heroY;//position of hero
+float herodX, herodY; ////speed of hero
+float monsterX, monsterY;///position of monster
+float monsterdX, monsterdY; ////speed of monster
+float goldX, goldY;////position of gold
+float left, right, top, bottom;
+float monsterA;////right arm chasing hero
+float monsterB;////left arm chasing hero
+float monsterC;////right arm protecting gold
+float monsterD;///left arm protecting gold
+float e; ///hero leg
+float f; ///hero leg
+float g; ////monster leg
+float h;////monster leg
 
-<P> <B><U>NOTE:</U>  The hero does NOT follow the mouse.</B>
-<BR>
-Hero chases gold at a certain rate; monster chases hero at a slower rate.
 
-<HR>
-
-
-Declare global variables for the position coordinates (X,Y) of each object.
-Variable names should start with a small letter (NOT a Capital) for the first word, 
-but you may Capitalize any additional words.
-If the names are "Igor" and "Vladimir"
-then global declarations might look something like this:
-<PRE>
-	//// GLOBALS ////
-	float goldX, goldY;
-	float igorX, igorY;
-	float vladX, vladY; </PRE>
-and the Java code to move the monster
-might look something like this: <PRE>
-	// Monster chases hero //
-	igorX=  igorX + (vladX-igorX) / 150;	// Slowly chase hero
-	igorY +=  (vladY-igorY) / 150;
-	if (igorY < horizon-20) { igorY = horizon-40);
-	// Monster catches hero!
-	if ( dist( vladX,vladY, igorX,igorY ) < 50 )  {
-	  scor -= 100;
-	  reset();				// Move to side.
-	} </PRE>
-<FONT COLOR=RED>
-<B>NOTE: </B> Please don't call them Igor and Vlad!  Make up your own names!
-</FONT>
-
-<HR>
-
-<P>
-In the setup() method,
-reset everything to starting positions:
-<UL>
-<LI> Monster on one side of the screen, at a random height
-<LI> Hero is transported to <B><U>safety</U></B> within the house <I>(above horizon)</I>.
-<LI> Gold at a random position near the center of the screen.
-<LI> // <I>Since this reset is used elsewhere, you should make it a separate method.</I>
-</UL><PRE>
-	//// SETUP:  window size, etc. ////
-	void setup() {
-		size( ..., ... );
-		reset();
-	}</PRE>
-
-<P>
-Your code for the draw() method should not actually <B><U>draw</U></B> anything.
-<BR>
-Instead, have it call other methods to do all the work.
-<PRE>
-	//// NEXT FRAME:  scene, monster, hero, etc.
-	void draw() {
-		scene();
-		monster();
-		hero();
-		gold();
-		messages();
-	}
-
-	//// SCENE:  sky, sun, grass.
-	void scene() {
-		background( 200, 200, 255 );	// Light blue sky.
-
-			// ++++ ADD YOUR CODE HERE ++++ //
-	} </PRE>
+//// SETUP:  window size, initialization (start in middle of screen).
+void setup() {
+  size( 640,480);  
+  left=50;
+  right=width-50;
+  top=height/3;
+  bottom= height*4/5;  
+  horizon=  height/2;
+  goldX=600;
+  goldY=horizon+200;
   
-Write your own Java code for each of these methods, and also for mousePressed() keyPressed() .
+ 
+   reset();
+} 
+ void reset() {
+ ////positions of sun, hero, and monster
+  SunX=0;
+  SunY=height/3; 
+  heroX=100;
+  heroY= horizon+50;
+  monsterX= 500;
+  monsterY= horizon-50; 
+  monsterA=(monsterY+40);
+  monsterB=(monsterY+40);
+  monsterC=(monsterX-10);
+  monsterD=(monsterX+50);
+  
+  ////speeds of sun, hero, and monster
+  
+  SundX=3; 
+  SundY=(-1); ///movement of sun 
+  herodX= 2;
+  herodY=1;  
+  monsterdX=-1;
+  monsterdY=3;
+}  
+  
+ 
+ 
+//// NEXT FRAME:  scene, action, show.
+void draw() {
+  //// SCENE:  sky, grass.
+  {background( 50,50,200 );                // sky
+  
+ stroke(0);
+ strokeWeight(1);
+  // Grass
+  fill( 100,200,100 );
+  rect( 0,horizon, width,height*3/4 );      // grass.
+  }
+                                            
+  //// ACTION:  move (x,y) coordinates.
+{ 
+  
+ SunX=SunX+SundX;
+ SunY=SunY+SundY; 
+ 
 
-<H3>SCENE & MESSAGES </H3>
-The scene is a grassy field with a row of trees,
-under a light blue sky with the sun moving slowly from left to right a few times per minute.
-Display title and score at the top; your name in the lower-left corner.
-Somewhere above the horizon is a score and a button.
+ 
+   heroX += herodX;  if ( heroX<left || heroX>right ) herodX *= -1;
+  heroY += herodY;  if ( heroY<top || heroY>bottom ) herodY *=  -1; 
+  
+   monsterX += monsterdX;  if ( monsterX<left || monsterX>right ) monsterdX *= -1;
+  monsterY += monsterdY;  if ( monsterY<top || monsterY>bottom ) monsterdY *=  -1;
+ 
+}
+  
 
-The scene should include the following:
-<UL>
-<LI> light-blue sky
-<LI> light-green grass covering the bottom 3/4 of the window
-<LI> a few trees on the horizon
-<LI> a house above the horizon (in front of trees)
-<LI> a sun that moves slowly across the sky (behind the trees)
-<P>
-<LI> somewhere above the horizon is a SCORE and a BUTTON
-<LI>
-Display a title, centered near the top of the window,
-and  display your name at the lower left.
-</UL>
+  float tmp;
+  // Swap velocities!
+  if ( dist( monsterX,monsterY, heroX,heroY ) < 150 ) {
+    tmp=herodX;  herodX=monsterdX;  monsterdX=tmp;
+    tmp=herodY;  herodY=monsterdY;  monsterdY=tmp;
+  }
+ 
+   
+ 
+ if (monsterX<500){monsterA=(monsterY+40);} else{monsterA =monsterY;}
+  if (monsterX<500){monsterC=(monsterX-10);}else {monsterC =(monsterX-40);} 
+  if (monsterX<500) {monsterB=(monsterY+40);}else{monsterB=monsterY+20;}
+  if (monsterX<500){monsterD=(monsterX+50);}else {monsterD=monsterX-40;} 
+  
+  
+ 
 
-<H3>
-BUTTON & SCORING
-</H3>
-
-<P>
-When the button is clicked,
-deduct 50 points,
-move the gold to a random position,
-and
-reset everything to starting positions:
-hero in the house and monster 
-at a random height
-on one side of the window
-(randomly left or right),
-and the gold at a random position near the center.
-
-<UL>
-<LI> When hero gets gold, add 50 points and transport him into the house.
-<LI> If monster catches hero, he loses 100 points and transports to side of window.
-<LI> Monster cannot go above the horizon (cannot catch hero within house).
-<LI> Player may click button to create new gold at any time <I>(to escape monster!)</I>
-</UL>
-
-<HR>
-
-<P>
-For this project, use functions with arguments to draw parts of the creatures on the screen,
-and add some animation
-<I>
-(such as legs that "walk" or arms that "wave" or wings that "flap" or eyes that blink, etc.)
-</I>
-
-<BR>
-For example, code to draw the hero might look something like this:
-<PRE>
-	//// HERO:  Vlad is centered at (x,y) with body width w & height h //
-	void drawVlad( float x, float y, float w, float h ) {
-		// Body.
-		rectMode( CENTER );
-		fill( ... );
-		rect( x,y, w,h );
-		...					// etc.
-	  	text( "Vlad", x-w/3, y-h/4 );		// Name on shirt.
-		fill( ... );
-
-		// Head //
-		float headHeight= 20;
-		head( headHeight, x, y-h-headHeight/2 );
-
-		// Legs (starting at hips). //
-		fill( ... );
-		leg( 40, x-w/2, y+h/2 );		// legs start at hips.
-		leg( 40, x+w/2, y+h/2 );
-
-		// Arms //
-		float armLength=h/3;
-		arm( armLength,  x-w/2, y-h/2 );	// arms at shoulders
-		arm( -armLength,  x+w/2, y-h/2 );
-	}
-	//// EYE:  tall ellipse, two eyes.
-	void head( float h, float x, float y ) {
-		// Draw head and eyes //
-		ellipse( x, y, h, h*3/4 );
-		eye( x-h/6, y-h/4 );		// left eye
-		eye( x+h/6, y-h/4 );		// right eye
-	}
-	//// EYE:  blue circle inside white circle
-	void eye( float a, float b) {
-		. . .
-	}
-	. . .
-</PRE>
+  //// SHOW:  sun, hero, monster (x,y)
 
 
+  
+fill(200,200,0);
+ellipse( SunX,SunY, 100, 100 ); ////sun
+    
+fill(0,0,100);
+rect(100,100, 200,150); ////grass
+fill(0);
+triangle(100,100, 200, 50, 300, 100); ////house roof
+rect(120,120, 60,40);/////house windows
+rect(220,120, 60,40);////house windows
+rect(120,180,40,50);////house windows
+rect(240,180,40,50);////house windows
+fill(50,0,0);////house front door
+rect(180,180, 40, 60);
+fill(150);
+rect(170,240, 60, 10); ////house front stoop
+rect(175,230, 50, 10);
+fill(100,0,0); /////house chimney
+rect(230,30, 20, 50);
 
-<P>
-Use the same head(), eye(), leg(), and arm() functions
-for both the hero and the monster.
-
-Use the same head(), eye(), leg(), and arm() functions
-for both the hero and the monster.
-<HR>
-<HR>
-
-
-
-
-<P>
-Be sure to begin with comment lines that state the purpose of your program
-(as well as your name),
-and begin each method (procedure, function, subprogram)
-with a comment line that states its purpose.
-
-			
-
-
-
-
-
-
+    
+/////hero 
+if(frameCount %30>15){e=(heroX-10);}else{e=(heroX+10);}
+if(frameCount %30>15){f=(heroX-20);}else{f=(heroX+20);}
 
 
+ fill (240,128,128);
+ ellipse(heroX, heroY, 40, 70); 
+ ellipse(heroX, heroY-50, 20, 40); 
+ 
+ strokeWeight(10);
+ line(heroX-5,heroY+30,e,heroY+70);///legs
+ line(heroX+10,heroY+30,f,heroY+70);
+ line(heroX,heroY-20,heroX+35,heroY-10);///arms
+ line(heroX+15,heroY-20,heroX+35,heroY-20);
+ strokeWeight(1);
+  
+ fill(0,0,200);
+ rect(heroX-20,heroY, 40, 35);///shorts
+ fill(0);
+ line(heroX, heroY+15, heroX, heroY+35);
+ 
+ fill(200,200,0);//hair
+ ellipse(heroX, heroY-65, 15,7);  
+ fill(0);
+ line( heroX+2, heroY-67, heroX+2, heroY-63);
+ ellipse(heroX+5, heroY-55, 2,2);
+ ellipse(heroX-5, heroY-55, 2,2);
+ triangle(heroX,heroY-45, heroX, heroY-47, heroX, heroY-45);
+
+ text("S", heroX-3, heroY);
+ 
+/////////trees
+fill(0,150,0);
+triangle(300,300, 350,100, 400,300);
+fill(100,0,0);
+rect(340,300,20,30);
+fill(0,150,0);
+triangle(150,400, 200,200, 250,400);
+fill(100,0,0);
+rect(190,400,20,30);
 
 
+ 
+ 
+ 
+ 
+ 
+ 
+ /////monster
+ if(frameCount %30>15){g=(monsterX+5);}else{g=(monsterX-15);}
+  if(frameCount %30>15){h=(monsterX+35);}else{h=(monsterX-20);}
+ 
+ 
+ fill(0,100,0);
+ rect(monsterX, monsterY, 40, 60);///torso
+ fill(100,0,0);
+ rect(monsterX+10, monsterY-25, 20, 25);///head
+ fill(0);
+ 
+ line(monsterX+15, monsterY-7, monsterX+17, monsterY-9);///mouth
+ line(monsterX+17, monsterY-9, monsterX+21, monsterY-9);
+ line(monsterX+21, monsterY-9, monsterX+23, monsterY-7);
+ ellipse(monsterX+16, monsterY-17, 3,3);////eyes
+ ellipse(monsterX+23, monsterY-17, 3,3);
+ line(monsterX+14, monsterY-23, monsterX+19, monsterY-17);
+ line(monsterX+21, monsterY-17, monsterX+27, monsterY-23);
+  strokeWeight(10);
+ line(monsterX,monsterY+5, monsterC, monsterA);/// right arm
+ line(monsterX+40,monsterY+5,monsterD, monsterB);/// left arm
+ line(monsterX+10, monsterY+60,g, monsterY+100);///right leg 
+ line(monsterX+30, monsterY+60, h, monsterY+100);///left leg ;
+ 
+ ////Pot of Gold
+ fill(212,175,55);
+ strokeWeight(0);
+ ellipse(goldX-8, goldY-38, 10, 10);
+ ellipse(goldX, goldY-38, 10, 10);
+ ellipse(goldX+8, goldY-38, 10, 10);
+ ellipse(goldX+16, goldY-38, 10, 10);
+ ellipse(goldX+24, goldY-38, 10, 10);
+ ellipse(goldX+32, goldY-38, 10, 10);
+ ellipse(goldX-5, goldY-45, 10, 10);
+ ellipse(goldX, goldY-45, 10, 10);
+ ellipse(goldX+7, goldY-45, 10, 10);
+ ellipse(goldX+15, goldY-45, 10, 10);
+ ellipse(goldX+23, goldY-45, 10, 10);
+ ellipse(goldX+31, goldY-45, 10, 10);
+ 
+ fill(0);
+ strokeWeight(0);
+ triangle(goldX, goldY, goldX-15, goldY-35, goldX+35, goldY-35);
+ triangle(goldX, goldY, goldX+35, goldY-35, goldX+20, goldY);
+ strokeWeight(3);
+ line(goldX-15, goldY-35, goldX+3, goldY-55);
+  line(goldX+3, goldY-55, goldX+17, goldY-55);
+   line(goldX+17, goldY-55, goldX+35, goldY-35);
+}
+
+//////// HANDLERS:  keys
 
 
+void keyPressed() {
+     if (key == 'r') {
+    reset();
+}
 
-
-
-
-
-
-
-
-
+if (key == 'q') {
+    exit();  }   
+}
